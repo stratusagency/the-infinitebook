@@ -1,5 +1,7 @@
 ![logo](https://assets.stratusagency.io/logo-large-black.svg)
 
+![photo](https://assets.stratusagency.io/the-infinitebook.png)
+
 ⚠️ This project is still at its early stages, so please wait its complete build to use it at 100 %.
 
 # The InfiniteBook
