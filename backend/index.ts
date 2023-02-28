@@ -30,19 +30,17 @@ const web3 = new Web3(
   )
 );
 
+const contract = new web3.eth.Contract(
+  abi as AbiItem[],
+  process.env.CONTRACT_ADDRESS
+);
+
 server.post(
   "/write",
   async (request: FastifyRequest<{ Body: WriterPayload }>, reply) => {
     const payload: WriterPayload = request.body;
 
-    const contract = new web3.eth.Contract(
-      abi as AbiItem[],
-      "0x0c016B1Ab47959e8EC2252A322182d2807300637"
-    );
-
     const private_key: string = process.env.WALLET_KEY as string;
-
-    console.log(private_key, "private_key");
 
     const account = web3.eth.accounts.privateKeyToAccount(private_key);
     web3.eth.accounts.wallet.add(private_key);
@@ -53,7 +51,6 @@ server.post(
       .writeMessage(payload.writer, payload.message)
       .send({ from: account.address, gasLimit }, (error: any, txHash: any) => {
         console.error(error, "writeMessage (error)");
-        console.log(txHash, "writeMessage (txHash)");
         reply.send(txHash);
       });
   }
@@ -64,22 +61,18 @@ server.post(
   async (request: FastifyRequest<{ Body: WriterPayload }>, reply) => {
     const payload: ReaderPayload = request.body;
 
-    console.log(payload, 'payload');
-    
-
-    const contract = new web3.eth.Contract(
-      abi as AbiItem[],
-      "0x0c016B1Ab47959e8EC2252A322182d2807300637"
-    );
-
     const message = await contract.methods.readMessage(payload.writer).call();
-    console.log(message, "message");
     reply.send(message);
   }
 );
 
+server.get("/messages", async (_request, _reply) => {
+  const messages = await contract.methods.getMessages().call();
+  return messages;
+});
+
 server.get("/", async (_request, _reply) => {
-  return "Requests: /write (POST) and /read (GET)";
+  return { contract_address: process.env.CONTRACT_ADDRESS };
 });
 
 server.listen({ port: 8080 }, async (err, address) => {

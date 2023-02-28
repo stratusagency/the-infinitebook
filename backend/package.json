@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.ts --network base-goerli",
     "build": "tsc -p tsconfig.json",
     "start": "node index.js"
   },

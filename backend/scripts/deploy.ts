@@ -6,17 +6,6 @@ async function main() {
 
   await interactContract.deployed();
 
-  await interactContract
-    .writeMessage(
-      "0x375CA6c10a447e9F465d5Ed90d4C9CF53Ab35B1E",
-      "hello world, this is stratusagency.eth!"
-    )
-    .then((message) => console.log(message.hash, "writeMessage"));
-
-  await interactContract
-    .readMessage("0x375CA6c10a447e9F465d5Ed90d4C9CF53Ab35B1E")
-    .then((message) => console.log(message, "readMessage"));
-
   console.log("Smart Contract Deployed at " + interactContract.address);
 }
 
